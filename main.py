@@ -13,8 +13,103 @@ import random
 
 # Configure Groq API
 st.sidebar.header("API Configuration")
-groq_api_key = "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"
+groq_api_key = "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"
 MODEL_NAME = "llama3-70b-8192"  # Default Groq model
+
+# Add language selection for Indian languages
+st.sidebar.header("Language Settings")
+LANGUAGES = {
+    "English": "en",
+    "हिन्दी (Hindi)": "hi", 
+    "বাংলা (Bengali)": "bn",
+    "తెలుగు (Telugu)": "te",
+    "मराठी (Marathi)": "mr",
+    "தமிழ் (Tamil)": "ta",
+    "ગુજરાતી (Gujarati)": "gu",
+    "ಕನ್ನಡ (Kannada)": "kn",
+    "മലയാളം (Malayalam)": "ml",
+    "ਪੰਜਾਬੀ (Punjabi)": "pa",
+    "ଓଡ଼ିଆ (Odia)": "or",
+    "অসমীয়া (Assamese)": "as",
+}
+
+selected_language = st.sidebar.selectbox(
+    "Select Language", 
+    options=list(LANGUAGES.keys()),
+    index=0  # Default to English
+)
+
+lang_code = LANGUAGES[selected_language]
+
+# Translations dictionary - extend with more phrases as needed
+TRANSLATIONS = {
+    # English translations (default)
+    "en": {
+        "app_title": "🩺 Medical Image Analysis Assistant",
+        "upload_text": "Upload a medical image for AI analysis. Note: This is for educational purposes only.",
+        "upload_button": "Upload a Medical Image (X-ray, MRI, etc.)",
+        "analyze_button": "Analyze Image",
+        "loading_text": "Performing analysis...",
+        "results_header": "Detection Results:",
+        "viz_caption": "Analysis Visualization",
+        "medical_analysis": "Medical Analysis:",
+        "local_analysis": "Local Analysis (No API):",
+        "questions_tab": "Medical Questions",
+        "questions_header": "Medical Question Assistant",
+        "questions_description": "Ask general medical questions and get AI-powered responses.",
+        "question_input": "Ask any medical question:",
+        "get_answer": "Get Answer",
+        "api_key_warning": "Please enter a Groq API key in the sidebar to use this feature.",
+        "method_choice": "Choose analysis method:",
+        "method_local_ai": "Local Analysis + AI Insights",
+        "method_local_only": "Local Analysis Only (No API)",
+        "disclaimer": "⚠ Important Disclaimer: This tool is for educational purposes only and should not be used for diagnosis. Always consult with a qualified healthcare professional for medical advice and interpretation of medical images."
+    },
+    # Hindi translations
+    "hi": {
+        "app_title": "🩺 चिकित्सा छवि विश्लेषण सहायक",
+        "upload_text": "एआई विश्लेषण के लिए चिकित्सा छवि अपलोड करें। नोट: यह केवल शैक्षिक उद्देश्यों के लिए है।",
+        "upload_button": "एक चिकित्सा छवि अपलोड करें (एक्स-रे, एमआरआई, आदि)",
+        "analyze_button": "छवि का विश्लेषण करें",
+        "loading_text": "विश्लेषण किया जा रहा है...",
+        "results_header": "पहचान परिणाम:",
+        "viz_caption": "विश्लेषण विज़ुअलाइज़ेशन",
+        "medical_analysis": "चिकित्सा विश्लेषण:",
+        "local_analysis": "स्थानीय विश्लेषण (कोई एपीआई नहीं):",
+        "questions_tab": "चिकित्सा प्रश्न",
+        "questions_header": "चिकित्सा प्रश्न सहायक",
+        "questions_description": "सामान्य चिकित्सा प्रश्न पूछें और एआई-संचालित प्रतिक्रियाएँ प्राप्त करें।",
+        "question_input": "कोई भी चिकित्सा प्रश्न पूछें:",
+        "get_answer": "उत्तर प्राप्त करें",
+        "api_key_warning": "इस सुविधा का उपयोग करने के लिए कृपया साइडबार में Groq API कुंजी दर्ज करें।",
+        "method_choice": "विश्लेषण विधि चुनें:",
+        "method_local_ai": "स्थानीय विश्लेषण + एआई अंतर्दृष्टि",
+        "method_local_only": "केवल स्थानीय विश्लेषण (कोई एपीआई नहीं)",
+        "disclaimer": "⚠ महत्वपूर्ण अस्वीकरण: यह उपकरण केवल शैक्षिक उद्देश्यों के लिए है और निदान के लिए इसका उपयोग नहीं किया जाना चाहिए। चिकित्सा सलाह और चिकित्सा छवियों की व्याख्या के लिए हमेशा योग्य स्वास्थ्य देखभाल पेशेवर से परामर्श करें।"
+    },
+    # Add translations for other languages here
+    # Bengali translations
+    "bn": {
+        "app_title": "🩺 মেডিকেল ইমেজ বিশ্লেষণ সহকারী",
+        "upload_text": "এআই বিশ্লেষণের জন্য একটি মেডিকেল ইমেজ আপলোড করুন। দ্রষ্টব্য: এটি শুধুমাত্র শিক্ষামূলক উদ্দেশ্যে।",
+        "upload_button": "একটি মেডিকেল ইমেজ আপলোড করুন (এক্স-রে, এমআরআই, ইত্যাদি)",
+        # Add more Bengali translations as needed
+        "disclaimer": "⚠ গুরুত্বপূর্ণ দাবিত্যাগ: এই টুলটি শুধুমাত্র শিক্ষামূলক উদ্দেশ্যে এবং রোগ নির্ণয়ের জন্য ব্যবহার করা উচিত নয়। চিকিৎসা পরামর্শ এবং মেডিকেল ইমেজ ব্যাখ্যার জন্য সর্বদা একজন যোগ্য স্বাস্থ্যসেবা পেশাদারের সাথে পরামর্শ করুন।"
+    },
+    # Telugu translations
+    "te": {
+        "app_title": "🩺 వైద్య చిత్ర విశ్లేషణ సహాయకుడు",
+        "upload_text": "AI విశ్లేషణ కోసం ఒక వైద్య చిత్రాన్ని అప్‌లోడ్ చేయండి. గమనిక: ఇది విద్యా ప్రయోజనాల కోసం మాత్రమే.",
+        # Add more Telugu translations as needed
+        "disclaimer": "⚠ ముఖ్యమైన నిరాకరణ: ఈ సాధనం విద్యా ప్రయోజనాల కోసం మాత్రమే మరియు రోగనిర్ధారణకు ఉపయోగించకూడదు. వైద్య సలహా మరియు వైద్య చిత్రాల వివరణ కోసం ఎల్లప్పుడూ అర్హత గల ఆరోగ్య నిపుణులను సంప్రదించండి."
+    },
+}
+
+# Get translation based on selected language, fallback to English if not available
+def translate(key):
+    if lang_code in TRANSLATIONS and key in TRANSLATIONS[lang_code]:
+        return TRANSLATIONS[lang_code][key]
+    return TRANSLATIONS["en"][key]  # Fallback to English
 
 # Verify API key is working
 if groq_api_key:
@@ -31,11 +126,11 @@ if groq_api_key:
                                 json=test_payload, 
                                 headers=headers)
         if response.status_code == 200:
-            st.sidebar.success("Groq API key is valid and working")
+            st.sidebar.success("✅ Groq API key is valid")
         else:
-            st.sidebar.error(f"API key error: {response.status_code} - {response.text}")
+            st.sidebar.error(f"❌ API key error: {response.status_code}")
     except Exception as e:
-        st.sidebar.error(f"API key error: {str(e)}")
+        st.sidebar.error(f"❌ API key error: {str(e)}")
 
 # Improved local model approach with multiple detection methods
 def detect_medical_condition_local(image):
@@ -125,9 +220,9 @@ def get_better_image_hash(image):
 
 # Add a cache for API responses to avoid rate limits
 @st.cache_data(ttl=3600)  # Cache for 1 hour
-def get_cached_medical_insights(condition_key):
-    """Check if we have a cached response for this condition"""
-    cache_file = f"cache_{condition_key[:40].replace(' ', '_')}.json"
+def get_cached_medical_insights(condition_key, lang="en"):
+    """Check if we have a cached response for this condition in the specified language"""
+    cache_file = f"cache_{condition_key[:40].replace(' ', '')}{lang}.json"
     
     if os.path.exists(cache_file):
         with open(cache_file, 'r') as f:
@@ -136,9 +231,9 @@ def get_cached_medical_insights(condition_key):
     
     return None
 
-def save_to_cache(condition_key, response):
-    """Save API response to cache file"""
-    cache_file = f"cache_{condition_key[:40].replace(' ', '_')}.json"
+def save_to_cache(condition_key, response, lang="en"):
+    """Save API response to cache file with language tag"""
+    cache_file = f"cache_{condition_key[:40].replace(' ', '')}{lang}.json"
     cache_data = {
         'response': response,
         'timestamp': datetime.now().isoformat()
@@ -154,8 +249,8 @@ def exponential_backoff(retries, max_retries=5, initial_delay=1):
     delay = initial_delay * (2 ** retries) + (random.random() * 0.5)  # Add jitter
     return min(delay, 60)  # Cap at 60 seconds
 
-def get_medical_insights(condition, max_retries=3, retry_delay=2):
-    """Fetch medical insights from Groq API with rate limit handling and caching."""
+def get_medical_insights(condition, lang_code="en", max_retries=3, retry_delay=2):
+    """Fetch medical insights from Groq API with rate limit handling, caching, and language support."""
     
     # Skip API call if we already know this is an error condition
     if condition.startswith("Error") or condition == "Model loading failed":
@@ -164,8 +259,8 @@ def get_medical_insights(condition, max_retries=3, retry_delay=2):
     # Generate a cache key from the condition
     condition_key = condition.lower().strip()
     
-    # Check cache first
-    cached_response = get_cached_medical_insights(condition_key)
+    # Check cache first, including language
+    cached_response = get_cached_medical_insights(condition_key, lang_code)
     if cached_response:
         return f"{cached_response}\n\n(This response was retrieved from cache)"
     
@@ -181,25 +276,44 @@ def get_medical_insights(condition, max_retries=3, retry_delay=2):
                 "Content-Type": "application/json"
             }
             
-            prompt = f"""
-            You are a medical assistant. Based on the medical image analysis, the following was detected: {condition}.
-            
-            Please provide:
-            1. A brief explanation of what this finding might indicate (be specific to the finding, not generic)
-            2. Common symptoms that might be associated with this specific finding
-            3. Possible causes related to the specific metrics mentioned
-            4. Recommended next steps
-            5. Important disclaimers about the limitations of AI-based diagnosis
-            
-            Format your response in a clear, structured way with headers for each section.
-            Be very clear that this is NOT a diagnosis and the patient should consult a medical professional.
-            Be specific to the details in the condition message and avoid generic responses that could apply to any condition.
-            """
+            # Construct the prompt in the selected language
+            if lang_code == "en":
+                prompt = f"""
+                You are a medical assistant. Based on the medical image analysis, the following was detected: {condition}.
+                
+                Please provide:
+                1. A brief explanation of what this finding might indicate (be specific to the finding, not generic)
+                2. Common symptoms that might be associated with this specific finding
+                3. Possible causes related to the specific metrics mentioned
+                4. Recommended next steps
+                5. Important disclaimers about the limitations of AI-based diagnosis
+                
+                Format your response in a clear, structured way with headers for each section.
+                Be very clear that this is NOT a diagnosis and the patient should consult a medical professional.
+                Be specific to the details in the condition message and avoid generic responses that could apply to any condition.
+                """
+            else:
+                prompt = f"""
+                You are a medical assistant. Based on the medical image analysis, the following was detected: {condition}.
+                
+                Please provide:
+                1. A brief explanation of what this finding might indicate (be specific to the finding, not generic)
+                2. Common symptoms that might be associated with this specific finding
+                3. Possible causes related to the specific metrics mentioned
+                4. Recommended next steps
+                5. Important disclaimers about the limitations of AI-based diagnosis
+                
+                Format your response in a clear, structured way with headers for each section.
+                Be very clear that this is NOT a diagnosis and the patient should consult a medical professional.
+                Be specific to the details in the condition message and avoid generic responses that could apply to any condition.
+                
+                Provide your response in {selected_language} language.
+                """
             
             payload = {
                 "model": MODEL_NAME,
                 "messages": [
-                    {"role": "system", "content": "You are a helpful medical assistant providing educational information."},
+                    {"role": "system", "content": f"You are a helpful medical assistant providing educational information. Respond in {selected_language} language."},
                     {"role": "user", "content": prompt}
                 ],
                 "temperature": 0.4,
@@ -217,8 +331,8 @@ def get_medical_insights(condition, max_retries=3, retry_delay=2):
             else:
                 raise Exception(f"API error: {response.status_code} - {response.text}")
             
-            # Save to cache
-            save_to_cache(condition_key, result)
+            # Save to cache with language tag
+            save_to_cache(condition_key, result, lang_code)
             
             # Update usage tracker
             today = datetime.now().strftime("%Y-%m-%d")
@@ -307,7 +421,7 @@ def clear_cache():
     st.success("Cache cleared! Next analysis will generate fresh results.")
 
 # Streamlit UI
-st.title("🩺 Medical Image Analysis Assistant")
+st.title(translate("app_title"))
 
 # Add cache clearing option
 if st.sidebar.button("Clear Analysis Cache"):
@@ -347,76 +461,74 @@ if usage_key not in st.session_state:
 st.sidebar.text(f"Requests today: {st.session_state[usage_key]}")
 
 # Create tabs
-tab1, tab2 = st.tabs(["Medical Image Analysis", "Medical Questions"])
+tab1, tab2 = st.tabs(["Medical Image Analysis", translate("questions_tab")])
 
 with tab1:
-    st.write("Upload a medical image for AI analysis. Note: This is for educational purposes only.")
+    st.write(translate("upload_text"))
     
-    uploaded_file = st.file_uploader("Upload a Medical Image (X-ray, MRI, etc.)", type=["jpg", "png", "jpeg"])
+    uploaded_file = st.file_uploader(translate("upload_button"), type=["jpg", "png", "jpeg"])
     
     if uploaded_file:
         image = Image.open(uploaded_file)
         st.image(image, caption="Uploaded Image", use_container_width=True)
         
         analysis_method = st.radio(
-            "Choose analysis method:",
-            ["Local Analysis + AI Insights", "Local Analysis Only (No API)"]
+            translate("method_choice"),
+            [translate("method_local_ai"), translate("method_local_only")]
         )
         
-        if st.button("Analyze Image"):
-            if analysis_method == "Local Analysis + AI Insights":
-                with st.spinner("Performing local analysis..."):
+        if st.button(translate("analyze_button")):
+            if analysis_method == translate("method_local_ai"):
+                with st.spinner(translate("loading_text")):
                     detected_condition, result_image = detect_medical_condition_local(image)
                     
-                    st.subheader("Detection Results:")
+                    st.subheader(translate("results_header"))
                     st.info(f"Detected: {detected_condition}")
                     
                     # Show detection visualization
                     if result_image is not None:
-                        st.image(result_image, caption="Analysis Visualization", use_container_width=True)
+                        st.image(result_image, caption=translate("viz_caption"), use_container_width=True)
                 
-                with st.spinner("Getting Medical Insights..."):
-                    insights = get_medical_insights(detected_condition)
-                    st.subheader("Medical Analysis:")
+                with st.spinner(translate("loading_text")):
+                    insights = get_medical_insights(detected_condition, lang_code)
+                    st.subheader(translate("medical_analysis"))
                     st.write(insights)
             
             else:  # Local Analysis Only
-                with st.spinner("Performing local analysis..."):
+                with st.spinner(translate("loading_text")):
                     detected_condition, result_image = detect_medical_condition_local(image)
                     
-                    st.subheader("Detection Results:")
+                    st.subheader(translate("results_header"))
                     st.info(f"Detected: {detected_condition}")
                     
                     # Show detection visualization
                     if result_image is not None:
-                        st.image(result_image, caption="Analysis Visualization", use_container_width=True)
+                        st.image(result_image, caption=translate("viz_caption"), use_container_width=True)
                     
                     # Get local insights without API
                     local_insights = get_local_analysis(detected_condition)
-                    st.subheader("Local Analysis (No API):")
+                    st.subheader(translate("local_analysis"))
                     st.write(local_insights)
 
 with tab2:
-    st.subheader("Medical Question Assistant")
-    st.write("Ask general medical questions and get AI-powered responses.")
+    st.subheader(translate("questions_header"))
+    st.write(translate("questions_description"))
     
-    user_query = st.text_input("Ask any medical question:")
-    if st.button("Get Answer") and user_query:
+    user_query = st.text_input(translate("question_input"))
+    if st.button(translate("get_answer")) and user_query:
         if not groq_api_key:
-            st.warning("Please enter a Groq API key in the sidebar to use this feature.")
+            st.warning(translate("api_key_warning"))
         else:
-            with st.spinner("Analyzing your question..."):
+            with st.spinner(translate("loading_text")):
                 try:
                     # Create a cache key for the question
                     cache_key = f"question_{hashlib.md5(user_query.encode()).hexdigest()[:10]}"
                     
                     # Check cache
-                    cached_response = get_cached_medical_insights(cache_key)
+                    cached_response = get_cached_medical_insights(cache_key, lang_code)
                     if cached_response:
                         st.write(f"{cached_response}\n\n(This response was retrieved from cache)")
                     else:
-                        st.write("Sending request to Groq API...")  # Debug message
-                        
                         # Prepare API request
                         headers = {
                             "Authorization": f"Bearer {groq_api_key}",
@@ -428,12 +540,14 @@ with tab2:
                         making sure to include appropriate disclaimers about not being a replacement for professional medical advice:
                         
                         {user_query}
+                        
+                        Provide your response in {selected_language} language.
                         """
                         
                         payload = {
                             "model": MODEL_NAME,
                             "messages": [
-                                {"role": "system", "content": "You are a helpful medical information assistant."},
+                                {"role": "system", "content": f"You are a helpful medical information assistant. Respond in {selected_language} language."},
                                 {"role": "user", "content": medical_prompt}
                             ],
                             "temperature": 0.4,
@@ -446,15 +560,13 @@ with tab2:
                             headers=headers
                         )
                         
-                        st.write("Response received from API")  # Debug message
-                        
                         if response.status_code == 200:
                             result = response.json()["choices"][0]["message"]["content"]
                         else:
                             raise Exception(f"API error: {response.status_code} - {response.text}")
                         
                         # Save to cache
-                        save_to_cache(cache_key, result)
+                        save_to_cache(cache_key, result, lang_code)
                         
                         # Update usage tracker
                         st.session_state[usage_key] += 1
@@ -482,9 +594,10 @@ This application demonstrates medical image analysis using:
 1. Local edge detection for basic image analysis
 2. Groq API for AI-powered medical insights
 3. Response caching to minimize API calls
+4. Support for multiple Indian languages
 
 No actual diagnosis is provided - this is for educational purposes only.
 """)
 
 st.markdown("---")
-st.markdown("⚠ Important Disclaimer: This tool is for educational purposes only and should not be used for diagnosis. Always consult with a qualified healthcare professional for medical advice and interpretation of medical images.")
+st.markdown(translate("disclaimer"))
